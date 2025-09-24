@@ -18,21 +18,25 @@ All colors MUST be HSL.
     --popover: 240 5% 6%;
     --popover-foreground: 240 5% 96%;
 
-    /* AI Primary - Deep blue with tech feel */
-    --primary: 224 71% 60%;
+    /* Neon AI Colors - Fluorescent Theme */
+    --primary: 120 100% 50%; /* Neon Green */
     --primary-foreground: 240 10% 3.9%;
-    --primary-glow: 224 71% 70%;
+    --primary-glow: 120 100% 70%;
 
-    /* AI Secondary - Sophisticated purple */
-    --secondary: 263 45% 45%;
+    /* Electric Purple */
+    --secondary: 280 100% 60%;
     --secondary-foreground: 240 5% 96%;
 
     --muted: 240 5% 6%;
     --muted-foreground: 240 5% 65%;
 
-    /* AI Accent - Vibrant cyber blue */
-    --accent: 200 100% 60%;
+    /* Electric Blue */
+    --accent: 190 100% 50%;
     --accent-foreground: 240 10% 3.9%;
+
+    /* Neon Pink */
+    --neon-pink: 320 100% 60%;
+    --neon-pink-foreground: 240 10% 3.9%;
 
     /* Success for positive AI responses */
     --success: 142 71% 45%;
@@ -47,10 +51,11 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* AI Gradients */
+    /* Neon AI Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-neural: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-    --gradient-cyber: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
+    --gradient-cyber: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--neon-pink)));
+    --gradient-neon: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--secondary)), hsl(var(--neon-pink)));
     --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
 
     /* AI Shadows */
@@ -112,11 +117,22 @@ All colors MUST be HSL.
 
   @keyframes ai-glow {
     0%, 100% {
-      box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.4), 0 0 40px hsl(var(--accent) / 0.2);
     }
     50% {
-      box-shadow: 0 0 40px hsl(var(--primary) / 0.6);
+      box-shadow: 0 0 40px hsl(var(--primary) / 0.8), 0 0 80px hsl(var(--accent) / 0.4);
     }
+  }
+
+  @keyframes neon-flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  @keyframes cyber-scan {
+    0% { transform: translateX(-100%) scaleX(0); }
+    50% { transform: translateX(50%) scaleX(1); }
+    100% { transform: translateX(100%) scaleX(0); }
   }
 
   .neural-pulse {
@@ -127,7 +143,20 @@ All colors MUST be HSL.
     animation: ai-glow 3s ease-in-out infinite;
   }
 
+  .neon-flicker {
+    animation: neon-flicker 3s ease-in-out infinite;
+  }
+
+  .cyber-scan {
+    animation: cyber-scan 2s ease-in-out infinite;
+  }
+
   .data-flow {
     animation: data-flow 2s ease-in-out infinite;
+  }
+
+  .neon-border {
+    border: 1px solid hsl(var(--primary));
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.5), inset 0 0 10px hsl(var(--primary) / 0.1);
   }
 }

@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import HeroSection from "@/components/HeroSection";
+import Navigation from "@/components/Navigation";
 import TicketForm from "@/components/TicketForm";
 import AnalysisResult from "@/components/AnalysisResult";
+import FeedbackSystem from "@/components/FeedbackSystem";
+import Dashboard from "@/components/Dashboard";
+import Insights from "@/components/Insights";
 import SettingsDialog from "@/components/SettingsDialog";
 import { useToast } from "@/hooks/use-toast";
 
 interface TicketData {
+  ticketId: string;
+  department: string;
   title: string;
   description: string;
+  priority: string;
   topic: string;
-  type: string;
+  resolutionStatus: string;
 }
 
 interface AnalysisData {
@@ -31,9 +38,11 @@ interface AnalysisData {
 }
 
 const Index = () => {
+  const [activeTab, setActiveTab] = useState("tickets");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisData | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   const { toast } = useToast();
 
   const handleAnalyze = async (ticketData: TicketData) => {
@@ -76,7 +85,7 @@ const Index = () => {
         priority: Math.floor(Math.random() * 4) + 1,
         estimatedTime: ["15 min", "30 min", "1 hour", "2 hours", "4 hours"][Math.floor(Math.random() * 5)],
         confidence: Math.floor(Math.random() * 20) + 80,
-        summary: `This ${ticketData.type} ticket relates to ${ticketData.topic} issues. Based on the description "${ticketData.description.substring(0, 100)}...", the system has identified potential causes and recommended solutions.`,
+        summary: `This ${ticketData.priority} priority ticket relates to ${ticketData.topic} issues. Based on the description "${ticketData.description.substring(0, 100)}...", the system has identified potential causes and recommended solutions.`,
         rootCause: "The issue appears to be caused by a configuration mismatch in the system settings, potentially related to recent updates or changes in the environment.",
         solution: "Implement a systematic approach to verify and correct the configuration parameters, followed by thorough testing to ensure stability.",
         steps: [
@@ -92,10 +101,11 @@ const Index = () => {
           { id: "TKT-2024-045", title: "Related system performance problem", similarity: 76 },
           { id: "TKT-2024-032", title: "Configuration mismatch after update", similarity: 72 }
         ],
-        tags: ["configuration", "system", ticketData.topic.toLowerCase(), ticketData.type.toLowerCase()]
+        tags: ["configuration", "system", ticketData.topic.toLowerCase(), ticketData.department.toLowerCase()]
       };
 
       setAnalysisResult(mockResult);
+      setShowFeedback(true);
       
       toast({
         title: "Analysis Complete",
@@ -114,40 +124,79 @@ const Index = () => {
     }
   };
 
+  const handleFeedbackSubmit = (feedback: any) => {
+    toast({
+      title: "Feedback Received",
+      description: "Thank you for helping us improve our AI system!",
+    });
+    
+    // Here you would send feedback to your backend
+    console.log("Feedback submitted:", feedback);
+  };
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "tickets":
+        return (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Ticket Form */}
+            <div className="space-y-6">
+              <TicketForm 
+                onAnalyze={handleAnalyze}
+                isAnalyzing={isAnalyzing}
+                onOpenSettings={() => setSettingsOpen(true)}
+              />
+            </div>
+
+            {/* Analysis Results & Feedback */}
+            <div className="space-y-6">
+              <AnalysisResult 
+                analysis={analysisResult}
+                isLoading={isAnalyzing}
+              />
+              
+              {showFeedback && analysisResult && (
+                <FeedbackSystem onFeedbackSubmit={handleFeedbackSubmit} />
+              )}
+            </div>
+          </div>
+        );
+      case "dashboard":
+        return <Dashboard />;
+      case "insights":
+        return <Insights />;
+      case "settings":
+        return (
+          <div className="max-w-2xl mx-auto">
+            <SettingsDialog 
+              open={true}
+              onOpenChange={(open) => !open && setActiveTab("tickets")}
+            />
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      {/* Hero Section */}
-      <HeroSection />
+      {/* Hero Section - only show on tickets tab */}
+      {activeTab === "tickets" && <HeroSection />}
+      
+      {/* Navigation */}
+      <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
       
       {/* Main Application */}
       <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-8">
-
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Ticket Form */}
-          <div className="space-y-6">
-            <TicketForm 
-              onAnalyze={handleAnalyze}
-              isAnalyzing={isAnalyzing}
-              onOpenSettings={() => setSettingsOpen(true)}
-            />
-          </div>
-
-          {/* Analysis Results */}
-          <div className="space-y-6">
-            <AnalysisResult 
-              analysis={analysisResult}
-              isLoading={isAnalyzing}
-            />
-          </div>
-        </div>
-
-        {/* Settings Dialog */}
-        <SettingsDialog 
-          open={settingsOpen}
-          onOpenChange={setSettingsOpen}
-        />
+        {renderTabContent()}
       </div>
+
+      {/* Settings Dialog */}
+      <SettingsDialog 
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+      />
     </div>
   );
 };

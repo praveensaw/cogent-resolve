@@ -10,10 +10,13 @@ import { Loader2, Bot, Zap, Brain, Settings } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface TicketData {
+  ticketId: string;
+  department: string;
   title: string;
   description: string;
+  priority: string;
   topic: string;
-  type: string;
+  resolutionStatus: string;
 }
 
 interface TicketFormProps {
@@ -24,10 +27,13 @@ interface TicketFormProps {
 
 const TicketForm: React.FC<TicketFormProps> = ({ onAnalyze, isAnalyzing, onOpenSettings }) => {
   const [formData, setFormData] = useState<TicketData>({
+    ticketId: `TKT-${Date.now()}`,
+    department: "",
     title: "",
     description: "",
+    priority: "",
     topic: "",
-    type: ""
+    resolutionStatus: "open"
   });
   const { toast } = useToast();
 
@@ -44,21 +50,28 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAnalyze, isAnalyzing, onOpenS
     "Mobile"
   ];
 
-  const types = [
-    "Incident",
-    "Request",
-    "Problem",
-    "Change",
-    "Bug",
-    "Feature Request",
-    "Support",
-    "Maintenance"
+  const departments = [
+    "Engineering",
+    "DevOps",
+    "Frontend",
+    "Backend",
+    "QA",
+    "Product",
+    "Design",
+    "Infrastructure"
+  ];
+
+  const priorities = [
+    "Critical",
+    "High", 
+    "Medium",
+    "Low"
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.description || !formData.topic || !formData.type) {
+    if (!formData.title || !formData.description || !formData.topic || !formData.department || !formData.priority) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields",
@@ -114,39 +127,95 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAnalyze, isAnalyzing, onOpenS
       
       <CardContent className="space-y-6">
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Ticket ID & Status */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-foreground">Ticket ID</Label>
+              <Input
+                value={formData.ticketId}
+                disabled
+                className="bg-muted/50 border-primary/20"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-foreground">Status</Label>
+              <Input
+                value={formData.resolutionStatus}
+                disabled
+                className="bg-muted/50 border-primary/20 capitalize"
+              />
+            </div>
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="title" className="text-sm font-medium text-foreground">
-              Ticket Title
+              Ticket Title *
             </Label>
             <Input
               id="title"
               placeholder="Enter a clear, descriptive title..."
               value={formData.title}
               onChange={(e) => handleInputChange("title", e.target.value)}
-              className="bg-background/50 border-primary/20 focus:border-primary/40 transition-colors"
+              className="bg-background/50 border-primary/20 focus:border-primary/40 transition-colors neon-border"
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="description" className="text-sm font-medium text-foreground">
-              Ticket Description
+              Ticket Description *
             </Label>
             <Textarea
               id="description"
               placeholder="Provide detailed information about the issue, including steps to reproduce, expected behavior, and any error messages..."
               value={formData.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
-              className="min-h-[120px] bg-background/50 border-primary/20 focus:border-primary/40 transition-colors resize-none"
+              className="min-h-[120px] bg-background/50 border-primary/20 focus:border-primary/40 transition-colors resize-none neon-border"
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="department" className="text-sm font-medium text-foreground">
+                Department *
+              </Label>
+              <Select value={formData.department} onValueChange={(value) => handleInputChange("department", value)}>
+                <SelectTrigger className="bg-background/50 border-primary/20 focus:border-primary/40 neon-border">
+                  <SelectValue placeholder="Select department..." />
+                </SelectTrigger>
+                <SelectContent className="bg-background/95 backdrop-blur-sm border-primary/20">
+                  {departments.map((dept) => (
+                    <SelectItem key={dept} value={dept.toLowerCase()} className="hover:bg-primary/10">
+                      {dept}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="priority" className="text-sm font-medium text-foreground">
+                Priority *
+              </Label>
+              <Select value={formData.priority} onValueChange={(value) => handleInputChange("priority", value)}>
+                <SelectTrigger className="bg-background/50 border-primary/20 focus:border-primary/40 neon-border">
+                  <SelectValue placeholder="Select priority..." />
+                </SelectTrigger>
+                <SelectContent className="bg-background/95 backdrop-blur-sm border-primary/20">
+                  {priorities.map((priority) => (
+                    <SelectItem key={priority} value={priority.toLowerCase()} className="hover:bg-primary/10">
+                      {priority}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="topic" className="text-sm font-medium text-foreground">
-                Topic Category
+                Topic Category *
               </Label>
               <Select value={formData.topic} onValueChange={(value) => handleInputChange("topic", value)}>
-                <SelectTrigger className="bg-background/50 border-primary/20 focus:border-primary/40">
+                <SelectTrigger className="bg-background/50 border-primary/20 focus:border-primary/40 neon-border">
                   <SelectValue placeholder="Select topic..." />
                 </SelectTrigger>
                 <SelectContent className="bg-background/95 backdrop-blur-sm border-primary/20">
@@ -158,42 +227,23 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAnalyze, isAnalyzing, onOpenS
                 </SelectContent>
               </Select>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="type" className="text-sm font-medium text-foreground">
-                Ticket Type
-              </Label>
-              <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
-                <SelectTrigger className="bg-background/50 border-primary/20 focus:border-primary/40">
-                  <SelectValue placeholder="Select type..." />
-                </SelectTrigger>
-                <SelectContent className="bg-background/95 backdrop-blur-sm border-primary/20">
-                  {types.map((type) => (
-                    <SelectItem key={type} value={type.toLowerCase()} className="hover:bg-primary/10">
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
           </div>
 
           <Button 
             type="submit" 
-            className="w-full" 
-            variant="ai"
+            className="w-full bg-gradient-neon hover:shadow-glow neon-flicker" 
             size="lg"
             disabled={isAnalyzing}
           >
             {isAnalyzing ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                Analyzing with AI...
+                <span className="cyber-scan">Resolving Ticket with AI...</span>
               </>
             ) : (
               <>
                 <Bot className="h-4 w-4 mr-2" />
-                Analyze Ticket
+                Resolve Ticket
               </>
             )}
           </Button>
