@@ -24,6 +24,8 @@ const SimilarTicketDialog = ({ isOpen, onClose, ticket }: SimilarTicketDialogPro
   if (!ticket) return null;
 
   const getPriorityColor = (priority: string) => {
+    if (!priority) return 'outline';
+    
     switch (priority.toLowerCase()) {
       case 'high': return 'destructive';
       case 'medium': return 'secondary';
