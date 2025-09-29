@@ -32,6 +32,12 @@ interface AnalysisData {
   similarTickets: Array<{
     id: string;
     title: string;
+    description: string;
+    priority: string;
+    department: string;
+    status: string;
+    resolution: string;
+    resolvedAt: string;
     similarity: number;
   }>;
   tags: string[];
@@ -97,9 +103,39 @@ const Index = () => {
           "Document the changes and update procedures"
         ],
         similarTickets: [
-          { id: "TKT-2024-001", title: "Similar configuration issue in production", similarity: 89 },
-          { id: "TKT-2024-045", title: "Related system performance problem", similarity: 76 },
-          { id: "TKT-2024-032", title: "Configuration mismatch after update", similarity: 72 }
+          { 
+            id: "TKT-2024-001", 
+            title: "Similar configuration issue in production", 
+            description: "Production environment experiencing intermittent connectivity issues after recent server updates. Multiple users reported timeout errors when accessing the main dashboard.",
+            priority: "high",
+            department: "Infrastructure",
+            status: "Resolved",
+            resolution: "Issue was resolved by updating the server configuration files and restarting the application services. The root cause was a timeout value that was too low in the new configuration. Steps taken:\n\n1. Identified the configuration parameter causing timeouts\n2. Updated the timeout value from 30s to 120s\n3. Restarted all affected services\n4. Monitored system performance for 48 hours\n5. Updated documentation with new configuration standards\n\nResult: All connectivity issues resolved and system performance improved by 25%.",
+            resolvedAt: "2024-01-15",
+            similarity: 89 
+          },
+          { 
+            id: "TKT-2024-045", 
+            title: "Related system performance problem", 
+            description: "System experiencing slow response times and high CPU usage during peak hours. Users reporting delays in loading pages and processing requests.",
+            priority: "medium",
+            department: "Operations",
+            status: "Resolved",
+            resolution: "Performance issue was resolved through database optimization and caching implementation:\n\n1. Analyzed system logs to identify bottlenecks\n2. Optimized database queries reducing execution time by 60%\n3. Implemented Redis caching for frequently accessed data\n4. Added connection pooling to reduce database overhead\n5. Set up monitoring alerts for future performance issues\n\nOutcome: System response time improved from 3.2s to 0.8s average, CPU usage reduced by 40%.",
+            resolvedAt: "2024-01-20",
+            similarity: 76 
+          },
+          { 
+            id: "TKT-2024-032", 
+            title: "Configuration mismatch after update", 
+            description: "After system update, several features stopped working correctly. API endpoints returning errors and some integrations failing to connect.",
+            priority: "high",
+            department: "Development",
+            status: "Resolved",
+            resolution: "Configuration mismatch was resolved by reverting to compatible settings and implementing proper version control:\n\n1. Rolled back to previous stable configuration\n2. Analyzed differences between old and new config files\n3. Updated configuration management scripts\n4. Implemented staging environment testing before production updates\n5. Created automated validation checks for configuration changes\n\nResolution: All features restored to full functionality, implemented better change management process to prevent future issues.",
+            resolvedAt: "2024-01-12",
+            similarity: 72 
+          }
         ],
         tags: ["configuration", "system", ticketData.topic.toLowerCase(), ticketData.department.toLowerCase()]
       };

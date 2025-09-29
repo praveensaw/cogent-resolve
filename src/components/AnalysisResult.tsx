@@ -29,6 +29,12 @@ interface AnalysisData {
   similarTickets: Array<{
     id: string;
     title: string;
+    description: string;
+    priority: string;
+    department: string;
+    status: string;
+    resolution: string;
+    resolvedAt: string;
     similarity: number;
   }>;
   tags: string[];
