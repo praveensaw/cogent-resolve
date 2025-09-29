@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -11,8 +11,10 @@ import {
   Lightbulb,
   TrendingUp,
   Users,
-  Wrench
+  Wrench,
+  ExternalLink
 } from "lucide-react";
+import SimilarTicketDialog from "./SimilarTicketDialog";
 
 interface AnalysisData {
   severity: "low" | "medium" | "high" | "critical";
@@ -38,6 +40,14 @@ interface AnalysisResultProps {
 }
 
 const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis, isLoading }) => {
+  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleSimilarTicketClick = (ticket: any) => {
+    setSelectedTicket(ticket);
+    setIsDialogOpen(true);
+  };
+
   if (isLoading) {
     return (
       <Card className="bg-card/50 backdrop-blur-sm border-primary/20 shadow-ai">
@@ -221,9 +231,16 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis, isLoading }) 
             <ScrollArea className="h-32">
               <div className="space-y-3">
                 {analysis.similarTickets.map((ticket, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-background/30 border border-primary/10">
+                  <div 
+                    key={index} 
+                    className="flex items-center justify-between p-2 rounded-lg bg-background/30 border border-primary/10 hover:shadow-glow transition-all duration-300 cursor-pointer group"
+                    onClick={() => handleSimilarTicketClick(ticket)}
+                  >
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-foreground">{ticket.title}</p>
+                      <div className="flex items-center space-x-2">
+                        <p className="text-sm font-medium text-foreground">{ticket.title}</p>
+                        <ExternalLink className="h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
                       <p className="text-xs text-muted-foreground">#{ticket.id}</p>
                     </div>
                     <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
@@ -265,6 +282,12 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis, isLoading }) 
           </CardContent>
         </Card>
       </div>
+
+      <SimilarTicketDialog 
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        ticket={selectedTicket}
+      />
     </div>
   );
 };

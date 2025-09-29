@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -14,7 +15,7 @@ import {
 } from "lucide-react";
 
 const Dashboard = () => {
-  const metrics = [
+  const [metrics, setMetrics] = useState([
     {
       title: "MTTR (Mean Time to Resolution)",
       value: "2.4 hours",
@@ -47,7 +48,37 @@ const Dashboard = () => {
       icon: Target,
       color: "neon-pink"
     }
-  ];
+  ]);
+
+  const [chartData] = useState([
+    { day: 'Mon', mttr: 2.8 },
+    { day: 'Tue', mttr: 2.4 },
+    { day: 'Wed', mttr: 2.1 },
+    { day: 'Thu', mttr: 2.3 },
+    { day: 'Fri', mttr: 2.0 },
+    { day: 'Sat', mttr: 1.8 },
+    { day: 'Sun', mttr: 2.2 }
+  ]);
+
+  // Simulate dynamic data updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMetrics(prevMetrics => 
+        prevMetrics.map(metric => ({
+          ...metric,
+          value: metric.title.includes('MTTR') 
+            ? `${(Math.random() * 2 + 1.5).toFixed(1)} hours`
+            : metric.title.includes('Tickets')
+            ? `${Math.floor(Math.random() * 200 + 1200)}`
+            : metric.title.includes('Rate')
+            ? `${Math.floor(Math.random() * 15 + 75)}%`
+            : `${(Math.random() * 0.5 + 4.5).toFixed(1)}/5`
+        }))
+      );
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const departments = [
     { name: "Engineering", tickets: 145, resolved: 132, rate: 91 },
@@ -109,11 +140,28 @@ const Dashboard = () => {
             <CardDescription>Mean Time to Resolution over time</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-center justify-center border-2 border-dashed border-primary/20 rounded-lg neon-border">
-              <div className="text-center space-y-2">
-                <BarChart3 className="h-12 w-12 mx-auto text-primary neural-pulse" />
-                <p className="text-sm text-muted-foreground">Chart visualization coming soon</p>
-              </div>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--primary) / 0.2)" />
+                  <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" />
+                  <YAxis stroke="hsl(var(--muted-foreground))" />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--primary) / 0.2)",
+                      borderRadius: "8px"
+                    }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="mttr" 
+                    stroke="hsl(var(--primary))" 
+                    strokeWidth={2}
+                    dot={{ fill: "hsl(var(--primary))", strokeWidth: 2, r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
