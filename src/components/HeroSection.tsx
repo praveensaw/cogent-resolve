@@ -52,9 +52,9 @@ const HeroSection = () => {
         <img 
           src={heroImage} 
           alt="AI-powered support center with neural networks and data visualization"
-          className="w-full h-full object-cover opacity-20"
+          className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-background/90 via-background/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-background/85 via-background/60 to-background/70" />
       </div>
 
       {/* Content */}
