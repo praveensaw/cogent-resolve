@@ -16,6 +16,7 @@ const App = () => {
   const [hasSeenIntro, setHasSeenIntro] = useState(false);
 
   useEffect(() => {
+    // Always show intro on first load, comment out to always show
     const seenIntro = localStorage.getItem("ai-ticket-intro-seen");
     if (seenIntro) {
       setShowIntro(false);
