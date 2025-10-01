@@ -265,22 +265,17 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                 </div>
 
                 {/* Text with 3D Effect */}
-                <motion.h1 
-                  className="text-5xl md:text-8xl font-bold leading-tight px-4"
-                  animate={{ 
-                    background: [
-                      "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))",
-                      "linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)), hsl(var(--accent)))",
-                      "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))"
-                    ],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
+                <motion.h1
+                  className="text-5xl md:text-8xl font-bold leading-tight px-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
                   style={{
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    color: "transparent",
-                    textShadow: '0 0 40px hsl(var(--primary) / 0.5)',
+                    backgroundSize: '200% 200%',
+                    textShadow: '0 0 40px hsl(var(--primary) / 0.5)'
                   }}
+                  animate={{ 
+                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                    scale: [1, 1.03, 1]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                 >
                   {phrases[currentPhase].text}
                 </motion.h1>

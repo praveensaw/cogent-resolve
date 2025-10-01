@@ -13,24 +13,12 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [showIntro, setShowIntro] = useState(true);
-  const [hasSeenIntro, setHasSeenIntro] = useState(false);
-
-  useEffect(() => {
-    // Always show intro on first load, comment out to always show
-    const seenIntro = localStorage.getItem("ai-ticket-intro-seen");
-    if (seenIntro) {
-      setShowIntro(false);
-      setHasSeenIntro(true);
-    }
-  }, []);
 
   const handleIntroComplete = () => {
-    localStorage.setItem("ai-ticket-intro-seen", "true");
     setShowIntro(false);
-    setHasSeenIntro(true);
   };
 
-  if (showIntro && !hasSeenIntro) {
+  if (showIntro) {
     return <IntroScreen onComplete={handleIntroComplete} />;
   }
 
