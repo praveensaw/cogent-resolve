@@ -13,11 +13,13 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
   const [showButtons, setShowButtons] = useState(false);
 
   const phrases = [
-    { text: "Welcome to the Future", icon: Sparkles },
-    { text: "AI-Powered Intelligence", icon: Brain },
-    { text: "Lightning Fast Resolution", icon: Zap },
-    { text: "Precision Targeting", icon: Target },
-    { text: "The Future is Here", icon: Rocket }
+    { text: "Welcome to the World of AI", icon: Sparkles },
+    { text: "Where Intelligence Meets Innovation", icon: Brain },
+    { text: "Powered by Next-Gen Technology", icon: Zap },
+    { text: "Revolutionizing Support Systems", icon: Target },
+    { text: "Smart Solutions, Instant Results", icon: Brain },
+    { text: "The Future is Now", icon: Rocket },
+    { text: "Step Into Tomorrow", icon: Sparkles }
   ];
 
   useEffect(() => {
@@ -27,7 +29,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
       } else {
         setShowButtons(true);
       }
-    }, 1500);
+    }, 1200);
 
     return () => clearTimeout(timer);
   }, [currentPhase, phrases.length]);
