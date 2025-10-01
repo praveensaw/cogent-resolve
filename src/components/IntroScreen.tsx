@@ -264,21 +264,95 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                   ))}
                 </div>
 
-                {/* Text with 3D Effect */}
-                <motion.h1
-                  className="text-5xl md:text-8xl font-bold leading-tight px-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
-                  style={{
-                    backgroundSize: '200% 200%',
-                    textShadow: '0 0 40px hsl(var(--primary) / 0.5)'
-                  }}
-                  animate={{ 
-                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                    scale: [1, 1.03, 1]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                {/* Message Box with Glow */}
+                <motion.div
+                  className="relative"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  {phrases[currentPhase].text}
-                </motion.h1>
+                  {/* Glowing Background Box */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-neon-blue/20 via-electric-blue/20 to-cyber-blue/20 rounded-3xl blur-2xl"
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      opacity: [0.5, 0.8, 0.5],
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  
+                  {/* Main Message Box */}
+                  <motion.div
+                    className="relative backdrop-blur-xl bg-gradient-to-br from-neon-blue/10 via-electric-blue/10 to-cyber-blue/10 border-2 border-neon-blue/30 rounded-3xl p-8 md:p-12 shadow-2xl"
+                    animate={{
+                      borderColor: [
+                        'hsl(var(--neon-blue) / 0.3)',
+                        'hsl(var(--electric-blue) / 0.6)',
+                        'hsl(var(--cyber-blue) / 0.3)',
+                      ],
+                      boxShadow: [
+                        '0 0 20px hsl(var(--neon-blue) / 0.3)',
+                        '0 0 60px hsl(var(--electric-blue) / 0.6)',
+                        '0 0 20px hsl(var(--cyber-blue) / 0.3)',
+                      ]
+                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  >
+                    {/* Corner Decorations */}
+                    {[...Array(4)].map((_, i) => (
+                      <motion.div
+                        key={`corner-deco-${i}`}
+                        className="absolute w-6 h-6"
+                        style={{
+                          top: i < 2 ? -3 : 'auto',
+                          bottom: i >= 2 ? -3 : 'auto',
+                          left: i % 2 === 0 ? -3 : 'auto',
+                          right: i % 2 === 1 ? -3 : 'auto',
+                        }}
+                        animate={{
+                          rotate: i % 2 === 0 ? 360 : -360,
+                          scale: [1, 1.2, 1],
+                        }}
+                        transition={{ duration: 4, repeat: Infinity, delay: i * 0.2 }}
+                      >
+                        <div className="w-full h-full border-t-2 border-l-2 border-electric-blue rounded-tl-lg" 
+                          style={{
+                            transform: i === 1 ? 'rotate(90deg)' : i === 2 ? 'rotate(270deg)' : i === 3 ? 'rotate(180deg)' : 'none'
+                          }}
+                        />
+                      </motion.div>
+                    ))}
+
+                    {/* Text with Enhanced Gradient */}
+                    <motion.h1
+                      className="text-5xl md:text-8xl font-bold leading-tight bg-gradient-to-r from-glow-cyan via-electric-blue to-neon-blue bg-clip-text text-transparent"
+                      style={{
+                        backgroundSize: '200% 200%',
+                        filter: 'drop-shadow(0 0 30px hsl(var(--electric-blue) / 0.8))',
+                      }}
+                      animate={{ 
+                        backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                        scale: [1, 1.02, 1]
+                      }}
+                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      {phrases[currentPhase].text}
+                    </motion.h1>
+
+                    {/* Scan Line Effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-b from-transparent via-electric-blue/20 to-transparent"
+                      animate={{
+                        y: ['-100%', '200%'],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "linear"
+                      }}
+                    />
+                  </motion.div>
+                </motion.div>
 
                 {/* Progress Dots */}
                 <motion.div
@@ -359,10 +433,11 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                       }}
                       transition={{ duration: 2, repeat: Infinity }}
                     >
-                      <motion.h1 
-                        className="text-7xl md:text-[10rem] font-bold leading-tight bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
+                    <motion.h1 
+                        className="text-7xl md:text-[10rem] font-bold leading-tight bg-gradient-to-r from-glow-cyan via-electric-blue to-neon-blue bg-clip-text text-transparent"
                         style={{
                           backgroundSize: '200% 200%',
+                          filter: 'drop-shadow(0 0 40px hsl(var(--electric-blue)))',
                         }}
                         animate={{ 
                           backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
@@ -395,7 +470,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                             rotate: { duration: 3, repeat: Infinity, delay: i * 0.3 }
                           }}
                         >
-                          <Icon className="h-8 w-8 text-primary" />
+                          <Icon className="h-8 w-8 text-electric-blue drop-shadow-[0_0_10px_hsl(var(--electric-blue))]" />
                         </motion.div>
                       ))}
                     </motion.div>
@@ -424,7 +499,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                     <Button 
                       size="lg" 
                       onClick={onComplete}
-                      className="px-16 py-8 text-xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 shadow-2xl shadow-primary/50 relative overflow-hidden group"
+                      className="px-16 py-8 text-xl font-bold bg-gradient-to-r from-neon-blue via-electric-blue to-cyber-blue bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 shadow-2xl shadow-electric-blue/60 relative overflow-hidden group border-2 border-electric-blue/50"
                     >
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-background/20 to-transparent"

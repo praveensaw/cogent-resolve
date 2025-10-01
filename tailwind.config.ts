@@ -48,6 +48,10 @@ export default {
           DEFAULT: "hsl(var(--neon-pink))",
           foreground: "hsl(var(--neon-pink-foreground))",
         },
+        "neon-blue": "hsl(var(--neon-blue))",
+        "electric-blue": "hsl(var(--electric-blue))",
+        "cyber-blue": "hsl(var(--cyber-blue))",
+        "glow-cyan": "hsl(var(--glow-cyan))",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
