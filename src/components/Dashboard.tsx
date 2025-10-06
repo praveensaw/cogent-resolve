@@ -83,12 +83,18 @@ const Dashboard = () => {
   ]);
 
   const [hourlyData, setHourlyData] = useState([
-    { time: '00:00', tickets: 12, aiProcessed: 10 },
-    { time: '04:00', tickets: 8, aiProcessed: 7 },
-    { time: '08:00', tickets: 45, aiProcessed: 38 },
+    { time: '00:00', tickets: 5, aiProcessed: 4 },
+    { time: '02:00', tickets: 3, aiProcessed: 2 },
+    { time: '04:00', tickets: 2, aiProcessed: 2 },
+    { time: '06:00', tickets: 8, aiProcessed: 7 },
+    { time: '08:00', tickets: 32, aiProcessed: 28 },
+    { time: '10:00', tickets: 58, aiProcessed: 48 },
     { time: '12:00', tickets: 67, aiProcessed: 55 },
-    { time: '16:00', tickets: 89, aiProcessed: 72 },
-    { time: '20:00', tickets: 54, aiProcessed: 46 }
+    { time: '14:00', tickets: 72, aiProcessed: 60 },
+    { time: '16:00', tickets: 65, aiProcessed: 54 },
+    { time: '18:00', tickets: 45, aiProcessed: 38 },
+    { time: '20:00', tickets: 28, aiProcessed: 24 },
+    { time: '22:00', tickets: 12, aiProcessed: 10 }
   ]);
 
   const [severityData, setSeverityData] = useState([
@@ -122,12 +128,26 @@ const Dashboard = () => {
         }))
       );
 
-      // Update hourly data
-      setHourlyData(prev => prev.map(item => ({
-        ...item,
-        tickets: Math.floor(Math.random() * 50 + 20),
-        aiProcessed: Math.floor(Math.random() * 45 + 15)
-      })));
+      // Update hourly data with realistic business hour patterns
+      setHourlyData(prev => prev.map(item => {
+        const hour = parseInt(item.time.split(':')[0]);
+        let baseTickets = 0;
+        
+        // Realistic pattern: low at night, peak during business hours
+        if (hour >= 0 && hour < 6) baseTickets = Math.floor(Math.random() * 5 + 2);
+        else if (hour >= 6 && hour < 9) baseTickets = Math.floor(Math.random() * 20 + 10);
+        else if (hour >= 9 && hour < 17) baseTickets = Math.floor(Math.random() * 30 + 50);
+        else if (hour >= 17 && hour < 20) baseTickets = Math.floor(Math.random() * 25 + 30);
+        else baseTickets = Math.floor(Math.random() * 15 + 10);
+        
+        const aiProcessed = Math.floor(baseTickets * (0.75 + Math.random() * 0.15));
+        
+        return {
+          ...item,
+          tickets: baseTickets,
+          aiProcessed: aiProcessed
+        };
+      }));
 
       // Update severity data
       setSeverityData(prev => prev.map(item => ({
@@ -330,29 +350,44 @@ const Dashboard = () => {
             </CardTitle>
             <CardDescription>Ticket priority breakdown</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-64">
+          <CardContent className="flex items-center justify-center">
+            <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={severityData}
                     cx="50%"
                     cy="50%"
-                    labelLine={false}
-                    label={(props: any) => `${props.name} ${(props.percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
+                    innerRadius={50}
+                    outerRadius={95}
+                    paddingAngle={3}
                     fill="#8884d8"
                     dataKey="value"
+                    label={(entry) => `${entry.name}: ${entry.value}`}
+                    labelLine={{
+                      stroke: 'hsl(var(--foreground) / 0.5)',
+                      strokeWidth: 1
+                    }}
                   >
                     {severityData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={entry.color}
+                        style={{
+                          filter: 'drop-shadow(0 0 8px currentColor)',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease'
+                        }}
+                        className="hover:opacity-80 hover:scale-110"
+                      />
                     ))}
                   </Pie>
                   <Tooltip 
                     contentStyle={{
                       backgroundColor: "hsl(var(--card))",
                       border: "1px solid hsl(var(--neon-pink) / 0.3)",
-                      borderRadius: "8px"
+                      borderRadius: "8px",
+                      padding: "8px 12px"
                     }}
                   />
                 </PieChart>

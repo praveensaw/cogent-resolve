@@ -499,7 +499,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                     <Button 
                       size="lg" 
                       onClick={onComplete}
-                      className="px-16 py-8 text-xl font-bold bg-gradient-to-r from-neon-blue via-electric-blue to-cyber-blue bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 shadow-2xl shadow-electric-blue/60 relative overflow-hidden group border-2 border-electric-blue/50"
+                      className="px-16 py-8 text-xl font-bold bg-gradient-to-r from-success via-primary to-accent bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 shadow-2xl shadow-success/60 relative overflow-hidden group border-2 border-success/50"
                     >
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-background/20 to-transparent"
