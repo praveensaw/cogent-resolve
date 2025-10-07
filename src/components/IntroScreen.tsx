@@ -29,7 +29,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
       } else {
         setShowButtons(true);
       }
-    }, 1200);
+    }, 2400);
 
     return () => clearTimeout(timer);
   }, [currentPhase, phrases.length]);
@@ -84,9 +84,9 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
               y: [0, (Math.random() - 0.5) * 200],
             }}
             transition={{
-              duration: Math.random() * 4 + 3,
+              duration: Math.random() * 6 + 5,
               repeat: Infinity,
-              delay: i * 0.1,
+              delay: i * 0.2,
               ease: "easeInOut"
             }}
           />
@@ -113,7 +113,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
               opacity: [0.3, 0.6, 0.3],
             }}
             transition={{
-              duration: Math.random() * 10 + 10,
+              duration: Math.random() * 15 + 15,
               repeat: Infinity,
               ease: "easeInOut"
             }}
@@ -136,9 +136,9 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
               opacity: [0, 1, 0],
             }}
             transition={{
-              duration: Math.random() * 3 + 2,
+              duration: Math.random() * 5 + 4,
               repeat: Infinity,
-              delay: i * 0.3,
+              delay: i * 0.5,
               ease: "linear"
             }}
           />
@@ -174,7 +174,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                 initial={{ opacity: 0, y: 100, scale: 0.5, rotateX: -90 }}
                 animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
                 exit={{ opacity: 0, y: -100, scale: 0.5, rotateX: 90 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
                 className="space-y-12"
               >
                 {/* Animated Icon with Circuit Effect */}
@@ -183,7 +183,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                   <motion.div
                     className="absolute inset-0 flex items-center justify-center"
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                   >
                     {[...Array(3)].map((_, i) => (
                       <motion.div
@@ -198,9 +198,9 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                           opacity: [0.3, 0.6, 0.3],
                         }}
                         transition={{
-                          duration: 2,
+                          duration: 4,
                           repeat: Infinity,
-                          delay: i * 0.3,
+                          delay: i * 0.5,
                         }}
                       />
                     ))}
@@ -213,7 +213,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                       scale: [1, 1.3, 1],
                     }}
                     transition={{ 
-                      duration: 2,
+                      duration: 4,
                       repeat: Infinity,
                       ease: "easeInOut"
                     }}
@@ -227,7 +227,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                           '0 0 20px hsl(var(--primary))'
                         ]
                       }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
+                      transition={{ duration: 3, repeat: Infinity }}
                       className="absolute inset-0 rounded-full"
                     />
                     {React.createElement(phrases[currentPhase].icon, {
@@ -256,9 +256,9 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                         opacity: [0.5, 1, 0.5],
                       }}
                       transition={{
-                        duration: 1.5,
+                        duration: 3,
                         repeat: Infinity,
-                        delay: i * 0.2,
+                        delay: i * 0.4,
                       }}
                     />
                   ))}
@@ -269,7 +269,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                   className="relative"
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 1 }}
                 >
                   {/* Glowing Background Box */}
                   <motion.div
@@ -278,7 +278,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                       scale: [1, 1.1, 1],
                       opacity: [0.5, 0.8, 0.5],
                     }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    transition={{ duration: 4, repeat: Infinity }}
                   />
                   
                   {/* Main Message Box */}
@@ -296,7 +296,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                         '0 0 20px hsl(var(--cyber-blue) / 0.3)',
                       ]
                     }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                    transition={{ duration: 6, repeat: Infinity }}
                   >
                     {/* Corner Decorations */}
                     {[...Array(4)].map((_, i) => (
@@ -313,7 +313,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                           rotate: i % 2 === 0 ? 360 : -360,
                           scale: [1, 1.2, 1],
                         }}
-                        transition={{ duration: 4, repeat: Infinity, delay: i * 0.2 }}
+                        transition={{ duration: 8, repeat: Infinity, delay: i * 0.4 }}
                       >
                         <div className="w-full h-full border-t-2 border-l-2 border-electric-blue rounded-tl-lg" 
                           style={{
@@ -334,7 +334,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                         backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
                         scale: [1, 1.02, 1]
                       }}
-                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                      transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
                     >
                       {phrases[currentPhase].text}
                     </motion.h1>
@@ -346,7 +346,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                         y: ['-100%', '200%'],
                       }}
                       transition={{
-                        duration: 2,
+                        duration: 4,
                         repeat: Infinity,
                         ease: "linear"
                       }}
@@ -376,7 +376,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                           '0 0 10px hsl(var(--primary))'
                         ]
                       } : {}}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: 0.6 }}
                     />
                   ))}
                 </motion.div>
@@ -390,7 +390,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
+                transition={{ duration: 2, ease: "easeOut" }}
                 className="space-y-16"
               >
                 {/* Portal Effect */}
@@ -398,7 +398,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                   <motion.div
                     className="absolute inset-0 flex items-center justify-center"
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
                   >
                     {[...Array(3)].map((_, i) => (
                       <motion.div
@@ -414,9 +414,9 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                           rotate: i % 2 === 0 ? 360 : -360,
                         }}
                         transition={{
-                          duration: 8,
+                          duration: 12,
                           repeat: Infinity,
-                          delay: i * 0.4,
+                          delay: i * 0.6,
                         }}
                       />
                     ))}
@@ -431,7 +431,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
                           '0 0 20px hsl(var(--primary))'
                         ]
                       }}
-                      transition={{ duration: 2, repeat: Infinity }}
+                      transition={{ duration: 4, repeat: Infinity }}
                     >
                     <motion.h1 
                         className="text-7xl md:text-[10rem] font-bold leading-tight bg-gradient-to-r from-glow-cyan via-electric-blue to-neon-blue bg-clip-text text-transparent"

@@ -160,7 +160,7 @@ const Dashboard = () => {
         ...item,
         value: Math.floor(Math.random() * 20 + 75)
       })));
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
