@@ -25,6 +25,7 @@ interface AnalysisData {
   summary: string;
   rootCause: string;
   solution: string;
+  technicalDetails: string;
   steps: string[];
   similarTickets: Array<{
     id: string;
@@ -174,11 +175,12 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis, isLoading }) 
           <CardHeader>
             <CardTitle className="flex items-center space-x-2 text-lg">
               <AlertTriangle className="h-5 w-5 text-orange-500" />
-              <span>Root Cause Analysis</span>
+              <span>Root Cause</span>
             </CardTitle>
+            <CardDescription>General Analysis</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
               {analysis.rootCause}
             </p>
           </CardContent>
@@ -190,14 +192,33 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis, isLoading }) 
               <CheckCircle className="h-5 w-5 text-success" />
               <span>Recommended Solution</span>
             </CardTitle>
+            <CardDescription>General Approach</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
               {analysis.solution}
             </p>
           </CardContent>
         </Card>
       </div>
+
+      {/* Technical Details */}
+      {analysis.technicalDetails && (
+        <Card className="bg-card/50 backdrop-blur-sm border-primary/20 shadow-ai">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Wrench className="h-5 w-5 text-accent" />
+              <span>Technical Details</span>
+            </CardTitle>
+            <CardDescription>In-depth technical analysis and configuration</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <pre className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap font-mono bg-background/30 p-4 rounded-lg border border-primary/10 overflow-x-auto">
+              {analysis.technicalDetails}
+            </pre>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Implementation Steps */}
       <Card className="bg-card/50 backdrop-blur-sm border-primary/20 shadow-ai">
