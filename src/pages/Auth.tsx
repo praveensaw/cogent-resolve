@@ -134,12 +134,11 @@ const Auth = () => {
     saveUser(signupData.email, signupData.password, signupData.name);
     
     toast({
-      title: "Account Created!",
-      description: "Welcome to the future of AI-powered support.",
+      title: "Account Created Successfully!",
+      description: "Please switch to the Sign In tab to login with your credentials.",
     });
     
     setIsLoading(false);
-    navigate("/dashboard");
   };
 
   return (
