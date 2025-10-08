@@ -23,16 +23,60 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Store registered users in localStorage
+  const getRegisteredUsers = () => {
+    const users = localStorage.getItem('registeredUsers');
+    return users ? JSON.parse(users) : [];
+  };
+
+  const saveUser = (email: string, password: string, name: string) => {
+    const users = getRegisteredUsers();
+    users.push({ email, password, name });
+    localStorage.setItem('registeredUsers', JSON.stringify(users));
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    
+    if (!loginData.email || !loginData.password) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter both email and password.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Simulate authentication
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Check if user exists and credentials match
+    const users = getRegisteredUsers();
+    const user = users.find((u: any) => u.email === loginData.email);
+
+    if (!user) {
+      toast({
+        title: "Account Not Found",
+        description: "No account found with this email. Please sign up first.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (user.password !== loginData.password) {
+      toast({
+        title: "Invalid Credentials",
+        description: "Incorrect password. Please try again.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
     
     toast({
       title: "Welcome back!",
-      description: "Successfully logged in to your account.",
+      description: `Successfully logged in as ${user.name}.`,
     });
     
     setIsLoading(false);
@@ -41,7 +85,24 @@ const Auth = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    if (!signupData.name || !signupData.email || !signupData.password || !signupData.confirmPassword) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (signupData.password.length < 6) {
+      toast({
+        title: "Weak Password",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     if (signupData.password !== signupData.confirmPassword) {
       toast({
@@ -49,12 +110,28 @@ const Auth = () => {
         description: "Passwords do not match. Please try again.",
         variant: "destructive",
       });
+      return;
+    }
+
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Check if user already exists
+    const users = getRegisteredUsers();
+    const existingUser = users.find((u: any) => u.email === signupData.email);
+
+    if (existingUser) {
+      toast({
+        title: "Account Already Exists",
+        description: "An account with this email already exists. Please log in.",
+        variant: "destructive",
+      });
       setIsLoading(false);
       return;
     }
 
-    // Simulate account creation
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    // Save new user
+    saveUser(signupData.email, signupData.password, signupData.name);
     
     toast({
       title: "Account Created!",
