@@ -8,11 +8,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Brain, Mail, Lock, User, ArrowRight, Sparkles, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import heroImage from "@/assets/hero-ai-tickets.jpg";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [activeTab, setActiveTab] = useState("login");
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [signupData, setSignupData] = useState({ 
     name: "", 
@@ -22,6 +25,11 @@ const Auth = () => {
   });
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   // Store registered users in localStorage
   const getRegisteredUsers = () => {
@@ -95,6 +103,15 @@ const Auth = () => {
       return;
     }
 
+    if (!validateEmail(signupData.email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (signupData.password.length < 6) {
       toast({
         title: "Weak Password",
@@ -133,12 +150,8 @@ const Auth = () => {
     // Save new user
     saveUser(signupData.email, signupData.password, signupData.name);
     
-    toast({
-      title: "Account Created Successfully!",
-      description: "Please switch to the Sign In tab to login with your credentials.",
-    });
-    
     setIsLoading(false);
+    setShowSuccessDialog(true);
   };
 
   return (
@@ -249,7 +262,7 @@ const Auth = () => {
               </CardHeader>
               
               <CardContent>
-                <Tabs defaultValue="login" className="space-y-6">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
                   <TabsList className="grid w-full grid-cols-2 bg-muted/50">
                     <TabsTrigger value="login" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                       Sign In
@@ -433,6 +446,29 @@ const Auth = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Success Dialog */}
+      <AlertDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Account Created Successfully!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your account has been created. Click OK to go to the login page.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction 
+              onClick={() => {
+                setShowSuccessDialog(false);
+                setActiveTab("login");
+                setSignupData({ name: "", email: "", password: "", confirmPassword: "" });
+              }}
+            >
+              OK
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
