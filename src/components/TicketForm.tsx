@@ -16,6 +16,7 @@ interface TicketData {
   description: string;
   priority: string;
   topic: string;
+  ticketType: string;
   resolutionStatus: string;
 }
 
@@ -33,6 +34,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAnalyze, isAnalyzing, onOpenS
     description: "",
     priority: "",
     topic: "",
+    ticketType: "",
     resolutionStatus: "open"
   });
   const { toast } = useToast();
@@ -68,10 +70,16 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAnalyze, isAnalyzing, onOpenS
     "Low"
   ];
 
+  const ticketTypes = [
+    "Incident",
+    "Service Request",
+    "Change Request"
+  ];
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.description || !formData.topic || !formData.department || !formData.priority) {
+    if (!formData.title || !formData.description || !formData.topic || !formData.department || !formData.priority || !formData.ticketType) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields",
@@ -173,7 +181,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAnalyze, isAnalyzing, onOpenS
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="department" className="text-sm font-medium text-foreground">
                 Department *
@@ -192,6 +200,26 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAnalyze, isAnalyzing, onOpenS
               </Select>
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="ticketType" className="text-sm font-medium text-foreground">
+                Ticket Type *
+              </Label>
+              <Select value={formData.ticketType} onValueChange={(value) => handleInputChange("ticketType", value)}>
+                <SelectTrigger className="bg-background/50 border-primary/20 focus:border-primary/40 neon-border">
+                  <SelectValue placeholder="Select ticket type..." />
+                </SelectTrigger>
+                <SelectContent className="bg-background/95 backdrop-blur-sm border-primary/20">
+                  {ticketTypes.map((type) => (
+                    <SelectItem key={type} value={type.toLowerCase()} className="hover:bg-primary/10">
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="priority" className="text-sm font-medium text-foreground">
                 Priority *
